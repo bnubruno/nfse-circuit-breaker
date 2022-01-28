@@ -1,7 +1,7 @@
 
 # Projeto NFS-e com Resilience4j
 
-Neste projeto é usado como exemplo a rotina de emissões de NFS-e para entendermos o uso aplicado do Resilience4j como  circuit breaker.
+Neste projeto é usado como exemplo a rotina de emissões de NFS-e para entendermos melhor os benefícios de um circuit breaker.
 
 ## Dicas
 
