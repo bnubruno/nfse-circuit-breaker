@@ -1,19 +1,29 @@
 package com.contaazul.interactions;
 
-import java.util.Random;
+import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.CLOSED;
+import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.OPEN;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.contaazul.Application;
 import com.contaazul.entities.Invoice;
 import com.contaazul.services.UnavailableServerMockService;
 
-@SpringBootTest
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.vavr.collection.Stream;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+		classes = Application.class)
 public class InvoiceInteractionTest {
 
-	private static final String SP = "São Paulo";
-	private static final String BLUMENAU = "Blumenau";
+	private static final String CITY_SP = "São Paulo";
+	private static final String CITY_BLUMENAU = "Blumenau";
 
 	@Autowired
 	private InvoiceIssuerInteraction invoiceInteraction;
@@ -22,11 +32,29 @@ public class InvoiceInteractionTest {
 	private UnavailableServerMockService cityService;
 
 	@Autowired
+	private CircuitBreakerRegistry registry;
+
+	@Autowired
 	private InvoiceIssuerWithoutCircuitBrakerInteraction withoutCircuitBraker;
 
+	@Before
+	public void setUp() {
+		registry.circuitBreaker( CITY_BLUMENAU ).reset();
+		registry.circuitBreaker( CITY_SP ).reset();
+	}
+
 	@Test
-	public void withCircuitBreaker() {
-		whenIssue( this.invoiceInteraction );
+	public void whenIssuedWithCircuitBreaker() {
+		CircuitBreaker blumenau = registry.circuitBreaker( CITY_BLUMENAU );
+		CircuitBreaker sp = registry.circuitBreaker( CITY_SP );
+		cityService.down( CITY_SP );
+
+		runFor( this.invoiceInteraction, 50, CITY_SP );
+		runFor( this.invoiceInteraction, 50, CITY_BLUMENAU );
+
+		assertThat( sp.getState(), equalTo( OPEN ) );
+		assertThat( blumenau.getState(), equalTo( CLOSED ) );
+		assertThat( blumenau.getMetrics().getNumberOfSuccessfulCalls(), equalTo( 10 ) );
 	}
 
 	@Test
@@ -35,25 +63,19 @@ public class InvoiceInteractionTest {
 	}
 
 	private void whenIssue(InvoiceIssuer invoiceIssuer) {
-		cityService.down( SP );
-		long begin = System.currentTimeMillis();
-		System.out.println( "Iniciado em: " + begin );
-		runFor( invoiceIssuer, 50, SP );
-		runFor( invoiceIssuer, 50, BLUMENAU );
-		long end = System.currentTimeMillis();
-		System.out.println( "Finalizado em: " + end );
-		System.out.println( "Total: " + (end - begin) / 1000 + " segundos" );
+		cityService.down( CITY_SP );
+
+		runFor( invoiceIssuer, 50, CITY_SP );
+		runFor( invoiceIssuer, 50, CITY_BLUMENAU );
 	}
 
 	private void runFor(InvoiceIssuer invoiceIssuer, int times, String cityName) {
-		Random random = new Random();
-		for (int i = 0; i < times; i++) {
+		Stream.rangeClosed( 1, times ).forEach( count -> {
 			try {
-				invoiceIssuer.send( cityName, buildInvoice( random.nextLong() ) );
-			} catch (Exception e) {
-				//do nothing
+				invoiceIssuer.send( cityName, buildInvoice( count.longValue() ) );
+			} catch (Exception ignored) {
 			}
-		}
+		} );
 	}
 
 	private Invoice buildInvoice(Long invoiceId) {
