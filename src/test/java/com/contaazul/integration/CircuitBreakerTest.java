@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,7 +58,7 @@ public class CircuitBreakerTest {
 		assertThat( blumenau.getMetrics().getNumberOfSuccessfulCalls(), equalTo( 10 ) );
 	}
 
-	@Test
+	@Ignore
 	public void whenIssuedWithoutCircuitBreaker() {
 		cityService.down( CITY_SP );
 
