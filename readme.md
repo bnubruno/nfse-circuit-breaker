@@ -13,6 +13,9 @@ Para visualizar as métricas no grafana utilize o comando abaixo:
 
 `localhost:3000`
 
+![Captura de tela de 2022-01-29 12-55-16](https://user-images.githubusercontent.com/10691038/151667684-fdefd8b0-abee-4495-b1ac-0beccc8b98b7.png)
+
+
 ## Prometheus
 
 `localhost:9090`
