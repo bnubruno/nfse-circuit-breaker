@@ -17,9 +17,4 @@ Prometheus `localhost:9090`
 
 ## Endpoints
 
-Teste de requisição `GET localhost:8080/issue/:cityName`
-
-Deixar cidade indisponível `GET localhost:8080/:cityName/down`
-
-Deixar cidade disponível `GET localhost:8080/:cityName/up`
-
+![Captura de tela de 2022-01-29 12-50-19](https://user-images.githubusercontent.com/10691038/151667538-c23af9bf-8f6c-48b6-bdea-11986a3fae1d.png)
