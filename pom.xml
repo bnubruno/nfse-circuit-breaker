@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.3</version>
+        <version>2.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.contaazul</groupId>
@@ -15,7 +15,7 @@
     <description>Example of the importance of circuit breaker in NFS-e </description>
     <properties>
         <java.version>11</java.version>
-        <spring-cloud.version>2021.0.0</spring-cloud.version>
+        <spring-cloud.version>2020.0.5</spring-cloud.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,6 +38,16 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
