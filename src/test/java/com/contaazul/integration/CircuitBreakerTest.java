@@ -1,4 +1,4 @@
-package com.contaazul.interactions;
+package com.contaazul.integration;
 
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.CLOSED;
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.OPEN;
@@ -20,7 +20,7 @@ import io.vavr.collection.Stream;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		classes = Application.class)
-public class InvoiceInteractionTest {
+public class CircuitBreakerTest {
 
 	private static final String CITY_SP = "São Paulo";
 	private static final String CITY_BLUMENAU = "Blumenau";
@@ -58,15 +58,11 @@ public class InvoiceInteractionTest {
 	}
 
 	@Test
-	public void withoutCircuitBreaker() {
-		whenIssue( this.withoutCircuitBraker );
-	}
-
-	private void whenIssue(InvoiceIssuer invoiceIssuer) {
+	public void whenIssuedWithoutCircuitBreaker() {
 		cityService.down( CITY_SP );
 
-		runFor( invoiceIssuer, 50, CITY_SP );
-		runFor( invoiceIssuer, 50, CITY_BLUMENAU );
+		runFor( this.withoutCircuitBraker, 50, CITY_SP );
+		runFor( this.withoutCircuitBraker, 50, CITY_BLUMENAU );
 	}
 
 	private void runFor(InvoiceIssuer invoiceIssuer, int times, String cityName) {

@@ -1,4 +1,4 @@
-package com.contaazul.interactions;
+package com.contaazul.integration;
 
 import com.contaazul.entities.Invoice;
 

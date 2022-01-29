@@ -4,13 +4,12 @@ import static java.lang.String.format;
 
 import lombok.AllArgsConstructor;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.contaazul.entities.Invoice;
-import com.contaazul.interactions.InvoiceIssuerInteraction;
+import com.contaazul.integration.InvoiceIssuerInteraction;
 import com.contaazul.services.UnavailableServerMockService;
 
 @RestController

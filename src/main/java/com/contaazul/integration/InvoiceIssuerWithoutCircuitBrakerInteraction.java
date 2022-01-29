@@ -1,5 +1,5 @@
 
-package com.contaazul.interactions;
+package com.contaazul.integration;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

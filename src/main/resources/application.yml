@@ -1,0 +1,33 @@
+# Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 70
+
+# Metrics
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: '*'
+  metrics:
+    distribution:
+      percentiles-histogram:
+        resilience4j:
+          circuitbreaker:
+            calls: true
+    export:
+      prometheus:
+        enabled: true
+
+
