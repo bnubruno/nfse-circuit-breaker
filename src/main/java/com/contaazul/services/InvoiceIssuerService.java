@@ -4,14 +4,19 @@ import java.time.Duration;
 import java.util.Random;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
 import com.contaazul.entities.Invoice;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class InvoiceIssuerService {
+
+	private static final String SENDING_MESSAGE = "Sending invoiceId: {}";
+	private static final String RECEIVED_MESSAGE = "Received NFS-e number: {} for invoiceId: {}";
 
 	private UnavailableServerMockService cityService;
 
@@ -21,9 +26,9 @@ public class InvoiceIssuerService {
 	}
 
 	private long request(Invoice invoice) {
-		System.out.println( "Sending invoiceId: " + invoice.getInvoiceId() );
+		log.info( SENDING_MESSAGE, invoice.getInvoiceId() );
 		long result = new Random().nextLong();
-		System.out.println( "Received NFS-e number: " + result + " for invoiceId: " + invoice.getInvoiceId() );
+		log.info( RECEIVED_MESSAGE, result, invoice.getInvoiceId() );
 		return result;
 	}
 

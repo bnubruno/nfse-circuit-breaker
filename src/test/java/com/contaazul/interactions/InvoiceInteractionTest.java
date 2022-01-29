@@ -48,7 +48,11 @@ public class InvoiceInteractionTest {
 	private void runFor(InvoiceIssuer invoiceIssuer, int times, String cityName) {
 		Random random = new Random();
 		for (int i = 0; i < times; i++) {
-			invoiceIssuer.send( cityName, buildInvoice( random.nextLong() ) );
+			try {
+				invoiceIssuer.send( cityName, buildInvoice( random.nextLong() ) );
+			} catch (Exception e) {
+				//do nothing
+			}
 		}
 	}
 
